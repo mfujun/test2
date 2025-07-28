@@ -4,286 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>给亲爱的你</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        love: '#f8b195',
-                        soft: '#f67280',
-                        light: '#fdf2f8',
-                        dark: '#355c7d'
-                    },
-                    fontFamily: {
-                        cursive: ['Dancing Script', 'cursive'],
-                        serif: ['Noto Serif SC', 'serif']
-                    }
-                }
-            }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .text-shadow {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            }
-            .bg-blur {
-                backdrop-filter: blur(8px);
-            }
-            .photo-frame {
-                position: relative;
-                border: 10px solid white;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-                transform: rotate(var(--rotation, 0deg));
-                transition: all 0.3s ease;
-            }
-            .photo-frame:hover {
-                transform: rotate(var(--rotation, 0deg)) scale(1.03);
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            }
-            .fade-in {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-            }
-            .fade-in.visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: #f9f6f0;
+            color: #333;
+            line-height: 1.8;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+        header::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 1px;
+            background-color: #d1bfa7;
+            margin: 20px auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #5d4037;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+        .subtitle {
+            font-style: italic;
+            color: #8d6e63;
+            font-size: 1.2rem;
+        }
+        .poem {
+            margin: 40px 0;
+            padding: 0 20px;
+            position: relative;
+        }
+        .poem::before, .poem::after {
+            content: "\"";
+            font-size: 4rem;
+            color: #d1bfa7;
+            opacity: 0.3;
+            position: absolute;
+        }
+        .poem::before {
+            top: -20px;
+            left: -10px;
+        }
+        .poem::after {
+            content: "\"";
+            bottom: -60px;
+            right: 10px;
+        }
+        .poem p {
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .date {
+            text-align: right;
+            margin: 30px 0;
+            color: #8d6e63;
+            font-style: italic;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d1bfa7, transparent);
+            margin: 40px 0;
+            border: none;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #8d6e63;
+            font-size: 0.9rem;
+        }
+        .heart {
+            color: #e74c3c;
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-light to-pink-100 min-h-screen overflow-x-hidden">
-    <!-- 顶部导航 -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/70 bg-blur transition-all duration-300" id="navbar">
-        <div class="container mx-auto px-4 py-3 flex justify-center items-center">
-            <h1 class="font-cursive text-2xl md:text-3xl text-soft">我们的故事</h1>
-        </div>
-    </nav>
-
-    <!-- 英雄区域 -->
-    <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-dark/40 z-10"></div>
-            <img src="https://picsum.photos/id/1068/1920/1080" alt="浪漫背景" class="w-full h-full object-cover">
-        </div>
-        <div class="container mx-auto px-4 z-20 text-center text-white">
-            <h1 class="font-cursive text-4xl md:text-6xl lg:text-7xl mb-4 text-shadow opacity-0" id="hero-title">致我最亲爱的</h1>
-            <p class="font-serif text-lg md:text-xl max-w-2xl mx-auto mt-6 text-shadow opacity-0" id="hero-subtitle">遇见你，是我生命中最美好的意外</p>
-            <div class="mt-12 opacity-0" id="scroll-indicator">
-                <a href="#memories" class="inline-block animate-bounce">
-                    <i class="fa fa-angle-down text-3xl"></i>
-                </a>
-            </div>
-        </div>
+<body>
+    <header>
+        <h1>给我最亲爱的你</h1>
+        <div class="subtitle">于时光深处，与你温暖相伴</div>
     </header>
 
-    <!-- 回忆照片墙 -->
-    <section id="memories" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="font-cursive text-3xl md:text-4xl text-center text-dark mb-16 fade-in">珍贵的回忆</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- 照片1 -->
-                <div class="photo-frame fade-in" style="--rotation: -2deg">
-                    <img src="https://picsum.photos/id/1027/600/400" alt="回忆照片1" class="w-full h-auto">
-                </div>
-                <!-- 照片2 -->
-                <div class="photo-frame fade-in" style="--rotation: 1deg">
-                    <img src="https://picsum.photos/id/1062/600/400" alt="回忆照片2" class="w-full h-auto">
-                </div>
-                <!-- 照片3 -->
-                <div class="photo-frame fade-in" style="--rotation: -3deg">
-                    <img src="https://picsum.photos/id/1069/600/400" alt="回忆照片3" class="w-full h-auto">
-                </div>
-                <!-- 照片4 -->
-                <div class="photo-frame fade-in" style="--rotation: 2deg">
-                    <img src="https://picsum.photos/id/1074/600/400" alt="回忆照片4" class="w-full h-auto">
-                </div>
-                <!-- 照片5 -->
-                <div class="photo-frame fade-in" style="--rotation: -1deg">
-                    <img src="https://picsum.photos/id/1080/600/400" alt="回忆照片5" class="w-full h-auto">
-                </div>
-                <!-- 照片6 -->
-                <div class="photo-frame fade-in" style="--rotation: 3deg">
-                    <img src="https://picsum.photos/id/1082/600/400" alt="回忆照片6" class="w-full h-auto">
-                </div>
-            </div>
-        </div>
+    <section class="poem">
+        <p>遇见你，是银河赠我的糖</p>
+        <p>从此，四季有了不同的意义</p>
+        <p>春是你眼底的新绿</p>
+        <p>夏是你发间的微风</p>
+        <p>秋是你唇边的浅笑</p>
+        <p>冬是你掌心的温度</p>
+        <p>往后余生，风雪是你</p>
+        <p>平淡是你，心底温柔也是你</p>
     </section>
 
-    <!-- 情书区域 -->
-    <section class="py-20 bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/1060/1920/1080')">
-        <div class="absolute inset-0 bg-dark/60"></div>
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-3xl mx-auto bg-white/90 p-8 md:p-12 rounded-lg shadow-xl fade-in">
-                <h2 class="font-cursive text-3xl md:text-4xl text-center text-soft mb-8">给你的情书</h2>
-                <div class="font-serif text-gray-700 leading-relaxed space-y-4 text-lg">
-                    <p>亲爱的：</p>
-                    <p>提笔给你写这封信的时候，窗外的阳光正好，就像你第一次对我微笑的那天。时光匆匆，我们一起走过了许多日子，每一个平凡的日常因为有你而变得特别。</p>
-                    <p>我喜欢你的笑容，喜欢你认真做事的样子，喜欢你偶尔的小迷糊，喜欢你所有的一切。和你在一起的每一天，都让我更加确定，你就是我想要共度一生的人。</p>
-                    <p>未来的路还很长，我想和你一起看更多的风景，经历更多的故事，创造更多的回忆。无论顺境逆境，我都会牵着你的手，一直走下去。</p>
-                    <p class="text-right mt-8">永远爱你的，</p>
-                    <p class="text-right font-cursive text-soft">你的名字</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <hr class="divider">
 
-    <!-- 时间线区域 -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="font-cursive text-3xl md:text-4xl text-center text-dark mb-16 fade-in">我们的时光轴</h2>
-            <div class="relative max-w-4xl mx-auto">
-                <!-- 时间线中轴线 -->
-                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-soft/30"></div>
-                
-                <!-- 时间线事件1 -->
-                <div class="relative mb-16 fade-in">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1 mt-6 md:mt-0">
-                            <h3 class="font-cursive text-2xl text-soft mb-2">第一次相遇</h3>
-                            <p class="text-gray-600">那个阳光明媚的午后，在咖啡馆里，你不小心撞到了我，咖啡洒了一身，却也洒进了我的心里。</p>
-                        </div>
-                        <div class="z-10 w-12 h-12 rounded-full bg-soft flex items-center justify-center text-white font-bold order-1 md:order-2">1</div>
-                        <div class="md:w-1/2 md:pl-12 order-3"></div>
-                    </div>
-                </div>
-                
-                <!-- 时间线事件2 -->
-                <div class="relative mb-16 fade-in">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-1/2 md:pr-12 order-1"></div>
-                        <div class="z-10 w-12 h-12 rounded-full bg-soft flex items-center justify-center text-white font-bold order-2">2</div>
-                        <div class="md:w-1/2 md:pl-12 order-3 mt-6 md:mt-0">
-                            <h3 class="font-cursive text-2xl text-soft mb-2">第一次约会</h3>
-                            <p class="text-gray-600">我们去了那家你一直想去的餐厅，聊了一整晚，仿佛有说不完的话。那天的星星特别亮，就像你眼中的光芒。</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 时间线事件3 -->
-                <div class="relative mb-16 fade-in">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1 mt-6 md:mt-0">
-                            <h3 class="font-cursive text-2xl text-soft mb-2">第一次旅行</h3>
-                            <p class="text-gray-600">一起去看海，听着海浪声，你靠在我肩上，那一刻我希望时间能够静止。</p>
-                        </div>
-                        <div class="z-10 w-12 h-12 rounded-full bg-soft flex items-center justify-center text-white font-bold order-1 md:order-2">3</div>
-                        <div class="md:w-1/2 md:pl-12 order-3"></div>
-                    </div>
-                </div>
-                
-                <!-- 时间线事件4 -->
-                <div class="relative fade-in">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-1/2 md:pr-12 order-1"></div>
-                        <div class="z-10 w-12 h-12 rounded-full bg-soft flex items-center justify-center text-white font-bold order-2">4</div>
-                        <div class="md:w-1/2 md:pl-12 order-3 mt-6 md:mt-0">
-                            <h3 class="font-cursive text-2xl text-soft mb-2">未来可期</h3>
-                            <p class="text-gray-600">还有更多的第一次等着我们去创造，更多的故事等着我们去书写。我爱你，不止今天，而是朝朝暮暮。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="date">
+        写于一个阳光明媚的午后
+    </div>
 
-    <!-- 页脚 -->
-    <footer class="bg-dark text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p class="font-cursive text-xl mb-2">永远爱你</p>
-            <p class="text-sm text-gray-300">© 2023 我们的故事 | 用爱编织的时光</p>
-        </div>
+    <footer>
+        <p>永远爱你的，<br>在每一个想你的瞬间 ❤️</p>
+        <p class="heart">❤</p>
     </footer>
-
-    <!-- 背景音乐 -->
-    <audio id="bg-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-    <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-soft text-white flex items-center justify-center shadow-lg z-50">
-        <i class="fa fa-music"></i>
-    </button>
-
-    <script>
-        // 页面加载动画
-        document.addEventListener('DOMContentLoaded', function() {
-            // 英雄区域文字动画
-            setTimeout(() => {
-                document.getElementById('hero-title').classList.add('opacity-100', 'transition-opacity', 'duration-1000');
-            }, 500);
-
-            setTimeout(() => {
-                document.getElementById('hero-subtitle').classList.add('opacity-100', 'transition-opacity', 'duration-1000');
-            }, 1200);
-
-            setTimeout(() => {
-                document.getElementById('scroll-indicator').classList.add('opacity-100', 'transition-opacity', 'duration-1000');
-            }, 1900);
-
-            // 滚动动画
-            const fadeElements = document.querySelectorAll('.fade-in');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-
-            fadeElements.forEach(element => {
-                observer.observe(element);
-            });
-
-            // 导航栏滚动效果
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('py-2', 'shadow-md');
-                    navbar.classList.remove('py-3');
-                } else {
-                    navbar.classList.add('py-3');
-                    navbar.classList.remove('py-2', 'shadow-md');
-                }
-            });
-
-            // 平滑滚动
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 70,
-                        behavior: 'smooth'
-                    });
-                });
-            });
-
-            // 背景音乐控制
-            const music = document.getElementById('bg-music');
-            const musicToggle = document.getElementById('music-toggle');
-            let musicPlaying = false;
-
-            musicToggle.addEventListener('click', () => {
-                if (musicPlaying) {
-                    music.pause();
-                    musicToggle.innerHTML = '<i class="fa fa-music"></i>';
-                } else {
-                    music.play().catch(e => {
-                        console.log('需要用户交互才能播放音乐:', e);
-                        alert('点击确定后将播放背景音乐');
-                        music.play();
-                    });
-                    musicToggle.innerHTML = '<i class="fa fa-pause"></i>';
-                }
-                musicPlaying = !musicPlaying;
-            });
-        });
-    </script>
 </body>
 </html>
