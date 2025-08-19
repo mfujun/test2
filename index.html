@@ -3,129 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给亲爱的你</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <title>七夕可爱表白</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        love: {
+                            pink: '#FF9BB3',
+                            light: '#FFD1DC',
+                            heart: '#FF4D6D',
+                            purple: '#D6A4FC'
+                        }
+                    },
+                    fontFamily: {
+                        cute: ['"Comic Sans MS"', '"Marker Felt"', 'Arial', 'sans-serif']
+                    }
+                }
+            }
         }
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background-color: #f9f6f0;
-            color: #333;
-            line-height: 1.8;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .float-animation {
+                animation: float 3s ease-in-out infinite;
+            }
+            .pulse-animation {
+                animation: pulse 2s infinite;
+            }
+            .heart-beat {
+                animation: heartBeat 1.5s infinite;
+            }
         }
-        header {
-            text-align: center;
-            padding: 40px 0;
-            position: relative;
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
         }
-        header::after {
-            content: "";
-            display: block;
-            width: 80px;
-            height: 1px;
-            background-color: #d1bfa7;
-            margin: 20px auto;
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
-        h1 {
-            font-size: 2.5rem;
-            color: #5d4037;
-            margin-bottom: 10px;
-            font-weight: normal;
+
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.3);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.3);
+            }
+            70% {
+                transform: scale(1);
+            }
         }
-        .subtitle {
-            font-style: italic;
-            color: #8d6e63;
-            font-size: 1.2rem;
-        }
-        .poem {
-            margin: 40px 0;
-            padding: 0 20px;
-            position: relative;
-        }
-        .poem::before, .poem::after {
-            content: "\"";
-            font-size: 4rem;
-            color: #d1bfa7;
-            opacity: 0.3;
-            position: absolute;
-        }
-        .poem::before {
-            top: -20px;
-            left: -10px;
-        }
-        .poem::after {
-            content: "\"";
-            bottom: -60px;
-            right: 10px;
-        }
-        .poem p {
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-        .date {
-            text-align: right;
-            margin: 30px 0;
-            color: #8d6e63;
-            font-style: italic;
-        }
-        .divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #d1bfa7, transparent);
-            margin: 40px 0;
-            border: none;
-        }
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            color: #8d6e63;
-            font-size: 0.9rem;
-        }
+
         .heart {
-            color: #e74c3c;
-            animation: heartbeat 1.5s infinite;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #FF4D6D;
+            transform: rotate(45deg);
+            animation: float 3s ease-in-out infinite;
         }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.1); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.1); }
-            70% { transform: scale(1); }
+
+        .heart:before, .heart:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #FF4D6D;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: -10px;
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>给我最亲爱的你</h1>
-        <div class="subtitle">于时光深处，与你温暖相伴</div>
-    </header>
+<body class="bg-gradient-to-br from-love-light via-white to-love-purple min-h-screen overflow-hidden relative font-cute">
+    <!-- 漂浮的爱心背景 -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none"></div>
 
-    <section class="poem">
-        <p>遇见你，是银河赠我的糖</p>
-        <p>从此，四季有了不同的意义</p>
-        <p>春是你眼底的新绿</p>
-        <p>夏是你发间的微风</p>
-        <p>秋是你唇边的浅笑</p>
-        <p>冬是你掌心的温度</p>
-        <p>往后余生，风雪是你</p>
-        <p>平淡是你，心底温柔也是你</p>
-    </section>
+    <!-- 主容器 -->
+    <div class="container mx-auto px-4 py-12 flex flex-col items-center justify-center relative z-10 h-screen">
+        <!-- 标题 -->
+        <div class="text-center mb-8">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-love-heart text-shadow mb-2 pulse-animation">七夕快乐</h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-700">我有话想对你说...</p>
+        </div>
 
-    <hr class="divider">
+        <!-- 表白卡片 -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full mx-auto transform transition-all duration-500 hover:scale-105 float-animation">
+            <div class="text-center mb-6">
+                <i class="fa fa-heart text-love-heart text-5xl heart-beat"></i>
+            </div>
+            <div class="space-y-4 text-center">
+                <p class="text-lg text-gray-800" id="confession-text">
+                    亲爱的，<br><br>
+                    从见到你的第一眼起，<br>
+                    我的心就像小鹿乱撞。<br><br>
+                    你就像一颗甜甜的糖果，<br>
+                    让我的生活充满了甜蜜。<br><br>
+                    七夕节，我想对你说：<br>
+                    <span class="text-love-heart font-bold text-xl">我喜欢你！</span><br><br>
+                    愿意做我的小可爱吗？
+                </p>
+            </div>
 
-    <div class="date">
-        写于一个阳光明媚的午后
+            <!-- 互动按钮 -->
+            <div class="mt-8 flex justify-center space-x-4">
+                <button id="yes-btn" class="bg-love-heart hover:bg-love-pink text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-love-heart focus:ring-opacity-50">
+                    愿意 <i class="fa fa-heart ml-1"></i>
+                </button>
+                <button id="no-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    再考虑 <i class="fa fa-clock-o ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 底部装饰 -->
+        <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-4">
+            <i class="fa fa-star text-yellow-400 text-2xl float-animation" style="animation-delay: 0s"></i>
+            <i class="fa fa-heart text-love-heart text-2xl float-animation" style="animation-delay: 0.5s"></i>
+            <i class="fa fa-star text-yellow-400 text-2xl float-animation" style="animation-delay: 1s"></i>
+            <i class="fa fa-heart text-love-heart text-2xl float-animation" style="animation-delay: 1.5s"></i>
+            <i class="fa fa-star text-yellow-400 text-2xl float-animation" style="animation-delay: 2s"></i>
+        </div>
     </div>
 
-    <footer>
-        <p>永远爱你的，<br>在每一个想你的瞬间 ❤️</p>
-        <p class="heart">❤</p>
-    </footer>
+    <script>
+        // 创建漂浮的爱心
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC'];
+            const sizes = [15, 20, 25];
+
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+
+                // 随机颜色和大小
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+
+                heart.style.backgroundColor = color;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.top = `${Math.random() * 100}vh`;
+                heart.style.opacity = `${0.3 + Math.random() * 0.7}`;
+                heart.style.animationDuration = `${3 + Math.random() * 7}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+
+                // 为伪元素设置颜色
+                heart.style.setProperty('--heart-color', color);
+
+                container.appendChild(heart);
+            }
+        }
+
+        // 按钮交互
+        document.addEventListener('DOMContentLoaded', () => {
+            createHearts();
+
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            const confessionText = document.getElementById('confession-text');
+
+            // 愿意按钮
+            yesBtn.addEventListener('click', () => {
+                confessionText.innerHTML = `
+                    太棒啦！<br><br>
+                    我会好好照顾你，<br>
+                    让你每天都开心！<br><br>
+                    <span class="text-love-heart font-bold text-xl">我们在一起吧！</span><br><br>
+                    <i class="fa fa-heart text-love-heart"></i> <i class="fa fa-heart text-love-heart"></i> <i class="fa fa-heart text-love-heart"></i>
+                `;
+
+                // 创建更多爱心
+                createHearts();
+
+                // 修改按钮
+                yesBtn.textContent = '永远爱你';
+                yesBtn.disabled = true;
+                noBtn.style.display = 'none';
+            });
+
+            // 再考虑按钮 - 会随机移动
+            noBtn.addEventListener('mouseover', () => {
+                const maxX = window.innerWidth - noBtn.offsetWidth;
+                const maxY = window.innerHeight - noBtn.offsetHeight;
+    
+                const randomX = Math.floor(Math.random() * (maxX)) - 200;
+                const randomY = Math.floor(Math.random() * (maxY)) - 200;
+
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = `${randomX}px`;
+                noBtn.style.top = `${randomY}px`;
+            });
+        });
+    </script>
 </body>
 </html>
