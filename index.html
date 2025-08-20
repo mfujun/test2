@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>七夕可爱表白</title>
+    <title>星河滚烫，你是人间理想</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -15,16 +15,21 @@
                             pink: '#FF9BB3',
                             light: '#FFD1DC',
                             heart: '#FF4D6D',
-                            purple: '#D6A4FC'
+                            purple: '#D6A4FC',
+                            sky: '#B5D8FE',
+                            blue: '#91B8E4'
                         }
                     },
                     fontFamily: {
-                        cute: ['"Comic Sans MS"', '"Marker Felt"', 'Arial', 'sans-serif']
+                        cute: ['"Comic Sans MS"', '"Marker Felt"', 'Arial', 'sans-serif'],
+                        poetic: ['"Ma Shan Zheng"', '"ZCOOL XiaoWei"', 'serif']
                     }
                 }
             }
         }
     </script>
+    <!-- 引入中文字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     <style type="text/tailwindcss">
         @layer utilities {
             .content-auto {
@@ -34,13 +39,37 @@
                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             }
             .float-animation {
-                animation: float 3s ease-in-out infinite;
+                /* animation: float 3s ease-in-out infinite; */
             }
             .pulse-animation {
-                animation: pulse 2s infinite;
+                /* animation: pulse 2s infinite; */
             }
             .heart-beat {
-                animation: heartBeat 1.5s infinite;
+                /* animation: heartBeat 1.5s infinite; */
+            }
+            .twinkle {
+                animation: twinkle 2s infinite;
+            }
+            .draw-border {
+                position: relative;
+            }
+            .draw-border::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                border: 2px solid transparent;
+                border-radius: inherit;
+                background: linear-gradient(45deg, #FF9BB3, #D6A4FC, #B5D8FE, #FF9BB3) border-box;
+                -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                animation: borderRotate 8s linear infinite;
+            }
+            .blur-bg {
+                backdrop-filter: blur(8px);
             }
         }
 
@@ -50,6 +79,15 @@
             }
             50% {
                 transform: translateY(-15px);
+            }
+        }
+
+        @keyframes float-slow {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-25px) translateX(10px);
             }
         }
 
@@ -80,6 +118,67 @@
             }
         }
 
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes borderRotate {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 300% 0%;
+            }
+        }
+
+        @keyframes firefly {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translate(10px, -10px) scale(1.1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+            75% {
+                transform: translate(-10px, 10px) scale(0.9);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes float-diagonal {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(10px, -10px);
+            }
+            50% {
+                transform: translate(20px, 0);
+            }
+            75% {
+                transform: translate(10px, 10px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
         .heart {
             position: absolute;
             width: 20px;
@@ -107,67 +206,202 @@
             top: 0;
             left: -10px;
         }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+            box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+            transform: scale(0.6);
+            animation: float-slow 20s ease-in-out infinite;
+        }
+
+        .cloud:before, .cloud:after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+
+        .cloud:before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 25px;
+        }
+
+        .cloud:after {
+            width: 35px;
+            height: 35px;
+            top: -15px;
+            right: 25px;
+        }
+
+        .star {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            animation: twinkle 2s infinite;
+        }
+
+        .firefly {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 6px yellow, 0 0 12px yellow;
+            animation: firefly 4s infinite;
+        }
+
+        .petal {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #FF9BB3;
+            border-radius: 100% 0 100% 0;
+            transform: rotate(45deg);
+            opacity: 0.7;
+            animation: float-diagonal 8s infinite linear;
+        }
+
+        .bg-gradient-animated {
+            background: linear-gradient(135deg, #B5D8FE, #FFD1DC, #D6A4FC, #B5D8FE);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-love-light via-white to-love-purple min-h-screen overflow-hidden relative font-cute">
+<body class="bg-gradient-animated min-h-screen overflow-hidden relative font-cute">
+    <!-- 星星背景 -->
+    <div id="stars-container" class="fixed inset-0 pointer-events-none"></div>
+    <!-- 漂浮的云朵 -->
+    <div id="clouds-container" class="fixed inset-0 pointer-events-none"></div>
     <!-- 漂浮的爱心背景 -->
     <div id="hearts-container" class="fixed inset-0 pointer-events-none"></div>
+    <!-- 萤火虫 -->
+    <div id="fireflies-container" class="fixed inset-0 pointer-events-none"></div>
+    <!-- 花瓣 -->
+    <div id="petals-container" class="fixed inset-0 pointer-events-none"></div>
 
     <!-- 主容器 -->
     <div class="container mx-auto px-4 py-12 flex flex-col items-center justify-center relative z-10 h-screen">
         <!-- 标题 -->
         <div class="text-center mb-8">
-            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-love-heart text-shadow mb-2 pulse-animation">七夕快乐</h1>
-            <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-700">我有话想对你说...</p>
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-love-heart text-shadow mb-2 font-poetic pulse-animation">星河滚烫，你是人间理想</h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-700 font-poetic">晚风轻踩着云朵，月亮在贩售快乐</p>
         </div>
 
         <!-- 表白卡片 -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full mx-auto transform transition-all duration-500 hover:scale-105 float-animation">
+        <div class="bg-white/80 blur-bg rounded-3xl shadow-xl p-8 max-w-md w-full mx-auto transform transition-all duration-500 hover:scale-105 float-animation draw-border relative">
             <div class="text-center mb-6">
                 <i class="fa fa-heart text-love-heart text-5xl heart-beat"></i>
             </div>
             <div class="space-y-4 text-center">
-                <p class="text-lg text-gray-800" id="confession-text">
+                <p class="text-lg text-gray-800 font-poetic leading-relaxed" id="confession-text">
                     亲爱的，<br><br>
-                    从见到你的第一眼起，<br>
-                    我的心就像小鹿乱撞。<br><br>
-                    你就像一颗甜甜的糖果，<br>
-                    让我的生活充满了甜蜜。<br><br>
-                    七夕节，我想对你说：<br>
-                    <span class="text-love-heart font-bold text-xl">我喜欢你！</span><br><br>
-                    愿意做我的小可爱吗？
+                    山有木兮木有枝，<br>
+                    心悦君兮君不知。<br><br>
+                    你是我绕过山河错落，<br>
+                    才找到的人间烟火。<br><br>
+                    七夕的月光很温柔，<br>
+                    我想和你一起，<br>
+                    从青丝到白发，<br>
+                    从心动到古稀。<br><br>
+                    <span class="text-love-heart font-bold text-xl">愿得一人心，白首不相离。</span>
                 </p>
             </div>
 
             <!-- 互动按钮 -->
-            <div class="mt-8 flex justify-center space-x-4">
-                <button id="yes-btn" class="bg-love-heart hover:bg-love-pink text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-love-heart focus:ring-opacity-50">
-                    愿意 <i class="fa fa-heart ml-1"></i>
+            <div class="mt-8 flex justify-center space-x-6">
+                <button id="yes-btn" class="bg-love-heart hover:bg-love-pink text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-love-heart focus:ring-opacity-50 font-poetic">
+                    许你一生 <i class="fa fa-heart ml-1"></i>
                 </button>
-                <button id="no-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
-                    再考虑 <i class="fa fa-clock-o ml-1"></i>
+                <button id="no-btn" class="bg-love-sky hover:bg-blue-300 text-gray-800 font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-love-sky focus:ring-opacity-50 font-poetic">
+                    再等等 <i class="fa fa-moon-o ml-1"></i>
                 </button>
             </div>
         </div>
 
         <!-- 底部装饰 -->
         <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-4">
-            <i class="fa fa-star text-yellow-400 text-2xl float-animation" style="animation-delay: 0s"></i>
+            <i class="fa fa-star text-yellow-300 text-2xl float-animation twinkle" style="animation-delay: 0s"></i>
             <i class="fa fa-heart text-love-heart text-2xl float-animation" style="animation-delay: 0.5s"></i>
-            <i class="fa fa-star text-yellow-400 text-2xl float-animation" style="animation-delay: 1s"></i>
+            <i class="fa fa-moon-o text-love-sky text-2xl float-animation" style="animation-delay: 1s"></i>
             <i class="fa fa-heart text-love-heart text-2xl float-animation" style="animation-delay: 1.5s"></i>
-            <i class="fa fa-star text-yellow-400 text-2xl float-animation" style="animation-delay: 2s"></i>
+            <i class="fa fa-star text-yellow-300 text-2xl float-animation twinkle" style="animation-delay: 2s"></i>
         </div>
     </div>
 
     <script>
+        // 创建星星背景
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const count = 200;
+
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.opacity = `${0.3 + Math.random() * 0.7}`;
+                star.style.width = `${3 + Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                // 随机颜色，让星星更生动
+                const colors = ['#fff', '#B5D8FE', '#D6A4FC'];
+                star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                star.style.boxShadow = `0 0 10px ${star.style.backgroundColor}, 0 0 20px ${star.style.backgroundColor}`;
+
+                container.appendChild(star);
+            }
+        }
+
+        // 创建漂浮的云朵
+        function createClouds() {
+            const container = document.getElementById('clouds-container');
+            const count = 8;
+
+            for (let i = 0; i < count; i++) {
+                const cloud = document.createElement('div');
+                cloud.classList.add('cloud');
+
+                cloud.style.left = `${Math.random() * 100}vw`;
+                cloud.style.top = `${Math.random() * 30}vh`;
+                cloud.style.animationDuration = `${15 + Math.random() * 15}s`;
+                cloud.style.animationDelay = `${Math.random() * 5}s`;
+                cloud.style.width = `${100 + Math.random() * 80}px`;
+                cloud.style.height = `${50 + Math.random() * 30}px`;
+                // 随机透明度
+                cloud.style.opacity = `${0.6 + Math.random() * 0.3}`;
+
+                container.appendChild(cloud);
+            }
+        }
+
         // 创建漂浮的爱心
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC'];
-            const sizes = [15, 20, 25];
+            const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC', '#B5D8FE'];
+            const sizes = [15, 20, 25, 30];
 
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 40; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
 
@@ -180,20 +414,100 @@
                 heart.style.height = `${size}px`;
                 heart.style.left = `${Math.random() * 100}vw`;
                 heart.style.top = `${Math.random() * 100}vh`;
-                heart.style.opacity = `${0.3 + Math.random() * 0.7}`;
-                heart.style.animationDuration = `${3 + Math.random() * 7}s`;
+                heart.style.opacity = `${0.3 + Math.random() * 0.5}`;
+                heart.style.animationDuration = `${3 + Math.random() * 10}s`;
                 heart.style.animationDelay = `${Math.random() * 5}s`;
 
-                // 为伪元素设置颜色
+                // 设置伪元素颜色
                 heart.style.setProperty('--heart-color', color);
+                // 为爱心添加before和after伪元素的颜色
+                heart.style.cssText += `
+                    --heart-color: ${color};
+                `;
+                // 为伪元素设置颜色
+                const style = document.createElement('style');
+                style.textContent = `
+                    .heart-${i}:before, .heart-${i}:after {
+                        background-color: ${color};
+                    }
+                `;
+                document.head.appendChild(style);
+                heart.classList.add(`heart-${i}`);
 
                 container.appendChild(heart);
             }
         }
 
+        // 创建萤火虫
+        function createFireflies() {
+            const container = document.getElementById('fireflies-container');
+            const count = 20;
+            const colors = ['#FFFF00', '#FFD700', '#FFFFE0'];
+
+            for (let i = 0; i < count; i++) {
+                const firefly = document.createElement('div');
+                firefly.classList.add('firefly');
+
+                firefly.style.left = `${Math.random() * 100}vw`;
+                firefly.style.top = `${Math.random() * 100}vh`;
+                firefly.style.animationDuration = `${3 + Math.random() * 5}s`;
+                firefly.style.animationDelay = `${Math.random() * 5}s`;
+                firefly.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firefly.style.boxShadow = `0 0 6px ${firefly.style.backgroundColor}, 0 0 12px ${firefly.style.backgroundColor}`;
+
+                container.appendChild(firefly);
+            }
+        }
+
+        // 创建花瓣
+        function createPetals() {
+            const container = document.getElementById('petals-container');
+            const count = 30;
+            const colors = ['#FF9BB3', '#FFD1DC', '#FF4D6D', '#D6A4FC'];
+
+            for (let i = 0; i < count; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+
+                petal.style.left = `${Math.random() * 100}vw`;
+                petal.style.top = `-${Math.random() * 50}px`; // 从顶部上方开始
+                petal.style.animationDuration = `${8 + Math.random() * 12}s`;
+                petal.style.animationDelay = `${Math.random() * 5}s`;
+                petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                // 随机旋转角度
+                petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+                // 设置下落速度
+                petal.style.animationTimingFunction = 'ease-in';
+
+                container.appendChild(petal);
+            }
+        }
+
+        // 让花瓣循环下落
+        function animatePetals() {
+            const container = document.getElementById('petals-container');
+            const petals = container.querySelectorAll('.petal');
+
+            petals.forEach(petal => {
+                const rect = petal.getBoundingClientRect();
+                if (rect.top > window.innerHeight) {
+                    // 花瓣已经落下屏幕，重置位置
+                    petal.style.top = `-${Math.random() * 50}px`;
+                    petal.style.left = `${Math.random() * 100}vw`;
+                }
+            });
+
+            requestAnimationFrame(animatePetals);
+        }
+
         // 按钮交互
         document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            createClouds();
             createHearts();
+            createFireflies();
+            createPetals();
+            animatePetals();
 
             const yesBtn = document.getElementById('yes-btn');
             const noBtn = document.getElementById('no-btn');
@@ -202,18 +516,23 @@
             // 愿意按钮
             yesBtn.addEventListener('click', () => {
                 confessionText.innerHTML = `
-                    太棒啦！<br><br>
-                    我会好好照顾你，<br>
-                    让你每天都开心！<br><br>
-                    <span class="text-love-heart font-bold text-xl">我们在一起吧！</span><br><br>
+                    既许一人以偏爱，<br>
+                    愿尽余生之慷慨。<br><br>
+                    往后余生，<br>
+                    风雪是你，平淡是你，<br>
+                    清贫是你，荣华是你，<br>
+                    心底温柔是你，<br>
+                    目光所致也是你。<br><br>
+                    <span class="text-love-heart font-bold text-xl">山河远阔，人间烟火，无一是你，无一不是你。</span><br><br>
                     <i class="fa fa-heart text-love-heart"></i> <i class="fa fa-heart text-love-heart"></i> <i class="fa fa-heart text-love-heart"></i>
                 `;
 
-                // 创建更多爱心
+                // 创建更多爱心和花瓣
                 createHearts();
+                createPetals();
 
                 // 修改按钮
-                yesBtn.textContent = '永远爱你';
+                yesBtn.textContent = '生死契阔';
                 yesBtn.disabled = true;
                 noBtn.style.display = 'none';
             });
@@ -222,7 +541,7 @@
             noBtn.addEventListener('mouseover', () => {
                 const maxX = window.innerWidth - noBtn.offsetWidth;
                 const maxY = window.innerHeight - noBtn.offsetHeight;
-    
+
                 const randomX = Math.floor(Math.random() * (maxX)) - 200;
                 const randomY = Math.floor(Math.random() * (maxY)) - 200;
 
