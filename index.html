@@ -71,6 +71,13 @@
             .blur-bg {
                 backdrop-filter: blur(8px);
             }
+            .danmaku {
+                position: absolute;
+                white-space: nowrap;
+                font-family: 'Ma Shan Zheng', cursive;
+                animation: danmakuMove 8s linear forwards;
+                z-index: 5;
+            }
         }
 
         @keyframes float {
@@ -144,7 +151,7 @@
                 opacity: 0.3;
             }
             25% {
-                transform: translate(10px, -10px) scale(1.1);
+                transform: translate(15px, -15px) scale(1.1);
                 opacity: 0.8;
             }
             50% {
@@ -152,7 +159,7 @@
                 opacity: 0.5;
             }
             75% {
-                transform: translate(-10px, 10px) scale(0.9);
+                transform: translate(-15px, 15px) scale(0.9);
                 opacity: 0.7;
             }
             100% {
@@ -176,6 +183,15 @@
             }
             100% {
                 transform: translate(0, 0);
+            }
+        }
+
+        @keyframes danmakuMove {
+            from {
+                transform: translateX(100vw);
+            }
+            to {
+                transform: translateX(-100%);
             }
         }
 
@@ -285,6 +301,9 @@
                 background-position: 0% 50%;
             }
         }
+        #danmaku-container {
+            z-index: 13
+        }
     </style>
 </head>
 <body class="bg-gradient-animated min-h-screen overflow-hidden relative font-cute">
@@ -298,6 +317,8 @@
     <div id="fireflies-container" class="fixed inset-0 pointer-events-none"></div>
     <!-- 花瓣 -->
     <div id="petals-container" class="fixed inset-0 pointer-events-none"></div>
+    <!-- 弹幕容器 -->
+    <div id="danmaku-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
 
     <!-- 主容器 -->
     <div class="container mx-auto px-4 py-12 flex flex-col items-center justify-center relative z-10 h-screen">
@@ -349,6 +370,35 @@
     </div>
 
     <script>
+        // 弹幕文本集合
+        const danmakuTexts = [
+            "我永远偏向你 就像向日葵永远偏向太阳",
+            "我想把所有的偏爱和例外都给你",
+            "世界很大 我只想赖在你身边",
+            "如果不曾遇见你 我本可以忍受孤独",
+            "月光下有两个影子 一个是我的 另一个也是我的",
+            "风很温柔 花很浪漫 你很特别 我很喜欢",
+            "告诉桃花可以开了 我等的人已经来了",
+            "星河滚烫，你是人间理想",
+            "晚风轻踩着云朵，月亮在贩售快乐",
+            "你是我绕过山河错落，才找到的人间烟火",
+            "愿得一人心，白首不相离",
+            "既许一人以偏爱，愿尽余生之慷慨",
+            "往后余生，风雪是你，平淡是你",
+            "心动不是答案，心定才是",
+            "我喜欢你，胜于昨日，略匮明朝",
+            "人间烟火，山河远阔，无一是你，无一不是你",
+            "你是我藏在微风里的喜欢",
+            "月光所照，皆是故乡；双脚所踏，皆是生活",
+            "海底月是天上月，眼前人是心上人",
+            "风很温柔，花很浪漫，你很特别",
+            "希望这个夏天，有惊喜，有心动，有人陪你吹晚风",
+            "你是我明目张胆的偏爱，众所周知的私心",
+            "我对你的爱，胜于昨日，略匮明朝",
+            "宇宙山河浪漫，生活点滴温暖，都值得我前进",
+            "世界很大，幸福很小，有你刚好"
+        ];
+
         // 创建星星背景
         function createStars() {
             const container = document.getElementById('stars-container');
@@ -441,13 +491,15 @@
         // 创建萤火虫
         function createFireflies() {
             const container = document.getElementById('fireflies-container');
-            const count = 20;
+            const count = 100;
             const colors = ['#FFFF00', '#FFD700', '#FFFFE0'];
 
             for (let i = 0; i < count; i++) {
                 const firefly = document.createElement('div');
                 firefly.classList.add('firefly');
 
+                firefly.style.width = `${Math.random() * 20 + 10}px`;
+                firefly.style.height = firefly.style.width
                 firefly.style.left = `${Math.random() * 100}vw`;
                 firefly.style.top = `${Math.random() * 100}vh`;
                 firefly.style.animationDuration = `${3 + Math.random() * 5}s`;
@@ -500,6 +552,62 @@
             requestAnimationFrame(animatePetals);
         }
 
+        // 创建弹幕
+        function createDanmaku() {
+            const container = document.getElementById('danmaku-container');
+            const text = danmakuTexts[Math.floor(Math.random() * danmakuTexts.length)];
+            const danmaku = document.createElement('div');
+            danmaku.classList.add('danmaku');
+            danmaku.textContent = text;
+
+            // 随机样式
+            const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC', '#B5D8FE', '#FFD1DC',
+  '#F8BBD0', '#D1C4E9', '#B3E5FC', '#FFECB3', '#C8E6C9',
+  '#E0F7FA', '#FFCCBC', '#ECEFF1', '#F3E5F5', '#B2DFDB'];
+            let color = colors[Math.floor(Math.random() * colors.length)];
+            let fontSize = 16 + Math.random() * 20;
+            let top = Math.random() * 90 + 10;
+            let duration = 6 + Math.random() * 8;
+            let opacity = 1;
+
+            danmaku.style.zIndex = 200;
+            danmaku.style.color = color;
+            if (text.includes('永远偏向你')) {
+                fontSize = '52';
+                color = '#F8BBD0';
+
+            }
+            if (text.includes('偏爱和例外都给你')) {
+                fontSize = '52';
+                color = '#D1C4E9';
+
+            }
+
+            danmaku.style.fontSize = `${fontSize}px`;
+            danmaku.style.top = `${top}vh`;
+            danmaku.style.opacity = opacity;
+            danmaku.style.animationDuration = `${duration}s`;
+            danmaku.style.textShadow = `1px 1px 2px rgba(0,0,0,0.2)`;
+
+            container.appendChild(danmaku);
+
+            // 动画结束后移除元素
+            setTimeout(() => {
+                danmaku.remove();
+            }, duration * 1000);
+        }
+
+        // 持续生成弹幕
+        function startDanmaku() {
+            // 初始生成一些弹幕
+            for (let i = 0; i < 5; i++) {
+                createDanmaku();
+            }
+
+            // 定时生成新弹幕
+            setInterval(createDanmaku, 1500);
+        }
+
         // 按钮交互
         document.addEventListener('DOMContentLoaded', () => {
             createStars();
@@ -508,6 +616,7 @@
             createFireflies();
             createPetals();
             animatePetals();
+            startDanmaku(); // 启动弹幕
 
             const yesBtn = document.getElementById('yes-btn');
             const noBtn = document.getElementById('no-btn');
@@ -553,3 +662,286 @@
     </script>
 </body>
 </html>
+
+<style>
+    @layer utilities {
+        .content-auto {
+            content-visibility: auto;
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .float-animation {
+            /* animation: float 3s ease-in-out infinite; */
+        }
+        .pulse-animation {
+            /* animation: pulse 2s infinite; */
+        }
+        .heart-beat {
+            /* animation: heartBeat 1.5s infinite; */
+        }
+        .twinkle {
+            animation: twinkle 2s infinite;
+        }
+        .draw-border {
+            position: relative;
+            border-radius: 1.5rem;
+            /* 修改边框样式为渐变并添加动画 */
+            border: 4px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(270deg, #FF4D6D, #FF9BB3, #D6A4FC, #B5D8FE, #FF4D6D) border-box;
+            background-size: 300% 300%;
+            animation: border-spin 6s linear infinite;
+        }
+        .draw-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid transparent;
+            border-radius: inherit;
+            background: linear-gradient(45deg, #FF9BB3, #D6A4FC, #B5D8FE, #FF9BB3) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderRotate 8s linear infinite;
+        }
+        .blur-bg {
+            backdrop-filter: blur(8px);
+        }
+        .danmaku {
+            position: absolute;
+            white-space: nowrap;
+            font-family: 'Ma Shan Zheng', cursive;
+            animation: danmakuMove 8s linear forwards;
+            z-index: 5;
+        }
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    @keyframes float-slow {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+        }
+        50% {
+            transform: translateY(-25px) translateX(10px);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    @keyframes heartBeat {
+        0% {
+            transform: scale(1);
+        }
+        14% {
+            transform: scale(1.3);
+        }
+        28% {
+            transform: scale(1);
+        }
+        42% {
+            transform: scale(1.3);
+        }
+        70% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes twinkle {
+        0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+
+    @keyframes borderRotate {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 300% 0%;
+        }
+    }
+
+    @keyframes firefly {
+        0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.3;
+        }
+        25% {
+            transform: translate(15px, -15px) scale(1.1);
+            opacity: 0.8;
+        }
+        50% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.5;
+        }
+        75% {
+            transform: translate(-15px, 15px) scale(0.9);
+            opacity: 0.7;
+        }
+        100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.3;
+        }
+    }
+
+    @keyframes float-diagonal {
+        0% {
+            transform: translate(0, 0);
+        }
+        25% {
+            transform: translate(10px, -10px);
+        }
+        50% {
+            transform: translate(20px, 0);
+        }
+        75% {
+            transform: translate(10px, 10px);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+    }
+
+    @keyframes danmakuMove {
+        from {
+            transform: translateX(100vw);
+        }
+        to {
+            transform: translateX(-100%);
+        }
+    }
+
+    .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #FF4D6D;
+        transform: rotate(45deg);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .heart:before, .heart:after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #FF4D6D;
+        border-radius: 50%;
+    }
+
+    .heart:before {
+        top: -10px;
+        left: 0;
+    }
+
+    .heart:after {
+        top: 0;
+        left: -10px;
+    }
+
+    .cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 100px;
+        box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+        transform: scale(0.6);
+        animation: float-slow 20s ease-in-out infinite;
+    }
+
+    .cloud:before, .cloud:after {
+        content: '';
+        position: absolute;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+    }
+
+    .cloud:before {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+        left: 25px;
+    }
+
+    .cloud:after {
+        width: 35px;
+        height: 35px;
+        top: -15px;
+        right: 25px;
+    }
+
+    .star {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+        animation: twinkle 2s infinite;
+    }
+
+    .firefly {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: yellow;
+        border-radius: 50%;
+        box-shadow: 0 0 6px yellow, 0 0 12px yellow;
+        animation: firefly 4s infinite;
+    }
+
+    .petal {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #FF9BB3;
+        border-radius: 100% 0 100% 0;
+        transform: rotate(45deg);
+        opacity: 0.7;
+        animation: float-diagonal 8s infinite linear;
+    }
+
+    .bg-gradient-animated {
+        background: linear-gradient(135deg, #B5D8FE, #FFD1DC, #D6A4FC, #B5D8FE);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    #danmaku-container {
+        z-index: 13
+    }
+</style>
