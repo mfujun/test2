@@ -426,14 +426,14 @@
         // 创建漂浮的云朵
         function createClouds() {
             const container = document.getElementById('clouds-container');
-            const count = 8;
+            const count = 10;
 
             for (let i = 0; i < count; i++) {
                 const cloud = document.createElement('div');
                 cloud.classList.add('cloud');
 
                 cloud.style.left = `${Math.random() * 100}vw`;
-                cloud.style.top = `${Math.random() * 30}vh`;
+                cloud.style.top = `${Math.random() * 20}vh`;
                 cloud.style.animationDuration = `${15 + Math.random() * 15}s`;
                 cloud.style.animationDelay = `${Math.random() * 5}s`;
                 cloud.style.width = `${100 + Math.random() * 80}px`;
@@ -447,6 +447,7 @@
 
         // 创建漂浮的爱心
         function createHearts() {
+            return
             const container = document.getElementById('hearts-container');
             const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC', '#B5D8FE'];
             const sizes = [15, 20, 25, 30];
