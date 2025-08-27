@@ -304,6 +304,17 @@
         #danmaku-container {
             z-index: 13
         }
+        @keyframes asda {
+            0% {
+                scale: 1;
+            }
+            100% {
+                scale: 1.1;
+            }
+        }
+        .ahahahah {
+            /* animation: asda 1.5s alternate infinite; */
+        }
     </style>
 </head>
 <body class="bg-gradient-animated min-h-screen overflow-hidden relative font-cute">
@@ -329,7 +340,7 @@
         </div>
 
         <!-- 表白卡片 -->
-        <div class="bg-white/80 blur-bg rounded-3xl shadow-xl p-8 max-w-md w-full mx-auto transform transition-all duration-500 hover:scale-105 float-animation draw-border relative">
+        <div class="ahahahah bg-white/80 blur-bg rounded-3xl shadow-xl p-8 max-w-md w-full mx-auto transform transition-all duration-500 hover:scale-105 float-animation draw-border relative">
             <div class="text-center mb-6">
                 <i class="fa fa-heart text-love-heart text-5xl heart-beat"></i>
             </div>
@@ -576,12 +587,21 @@
             if (text.includes('永远偏向你')) {
                 fontSize = '52';
                 color = '#F8BBD0';
+                top = 30;
+                duration = 15
 
             }
             if (text.includes('偏爱和例外都给你')) {
                 fontSize = '52';
                 color = '#D1C4E9';
-
+                top = 40
+                duration = 15
+            }
+            if (text.includes('我只想赖在你身边')) {
+                fontSize = '52';
+                color = '#D1C4E9';
+                top = 50
+                duration = 16
             }
 
             danmaku.style.fontSize = `${fontSize}px`;
@@ -601,12 +621,12 @@
         // 持续生成弹幕
         function startDanmaku() {
             // 初始生成一些弹幕
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 10; i++) {
                 createDanmaku();
             }
 
             // 定时生成新弹幕
-            setInterval(createDanmaku, 1500);
+            setInterval(createDanmaku, 1000);
         }
 
         // 按钮交互
@@ -642,7 +662,7 @@
                 createPetals();
 
                 // 修改按钮
-                yesBtn.textContent = '生死契阔';
+                yesBtn.textContent = '我爱你';
                 yesBtn.disabled = true;
                 noBtn.style.display = 'none';
             });
