@@ -23,8 +23,7 @@
         }
         
         .container {
-            width: 100%;
-            max-width: 800px;
+            width: 80vw;
             background-color: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -51,7 +50,7 @@
         .signature-container {
             position: relative;
             width: 100%;
-            height: 800px;
+            height: 100vh;
         }
         
         #signatureCanvas {
@@ -194,15 +193,10 @@
 </head>
 <body>
     <div class="container">
-        <header>
+        <!-- <header>
             <h1>Canvas手写签名板</h1>
             <p class="subtitle">请在下方区域绘制您的签名</p>
-        </header>
-        
-        <div class="signature-container">
-            <canvas id="signatureCanvas"></canvas>
-        </div>
-        
+        </header> -->
         <div class="controls">
             <div class="color-picker">
                 <span>颜色：</span>
@@ -225,9 +219,8 @@
                 <button id="downloadBtn">下载</button>
             </div>
         </div>
-        
-        <div class="instructions">
-            <p>提示：使用鼠标或触摸屏进行绘制。点击"保存"可预览签名，点击"下载"可保存签名图片。</p>
+        <div class="signature-container">
+            <canvas id="signatureCanvas"></canvas>
         </div>
     </div>
     
