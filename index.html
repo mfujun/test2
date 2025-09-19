@@ -3,966 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>星河滚烫，你是人间理想</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        love: {
-                            pink: '#FF9BB3',
-                            light: '#FFD1DC',
-                            heart: '#FF4D6D',
-                            purple: '#D6A4FC',
-                            sky: '#B5D8FE',
-                            blue: '#91B8E4'
-                        }
-                    },
-                    fontFamily: {
-                        cute: ['"Comic Sans MS"', '"Marker Felt"', 'Arial', 'sans-serif'],
-                        poetic: ['"Ma Shan Zheng"', '"ZCOOL XiaoWei"', 'serif']
-                    }
-                }
-            }
+    <title>Canvas手写签名板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-    </script>
-    <!-- 引入中文字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .text-shadow {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            }
-            .float-animation {
-                /* animation: float 3s ease-in-out infinite; */
-            }
-            .pulse-animation {
-                /* animation: pulse 2s infinite; */
-            }
-            .heart-beat {
-                /* animation: heartBeat 1.5s infinite; */
-            }
-            .twinkle {
-                animation: twinkle 2s infinite;
-            }
-            .draw-border {
-                position: relative;
-            }
-            .draw-border::before {
-                content: '';
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                right: -2px;
-                bottom: -2px;
-                border: 2px solid transparent;
-                border-radius: inherit;
-                background: linear-gradient(45deg, #FF9BB3, #D6A4FC, #B5D8FE, #FF9BB3) border-box;
-                -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                animation: borderRotate 8s linear infinite;
-            }
-            .blur-bg {
-                backdrop-filter: blur(8px);
-            }
-            .danmaku {
-                position: absolute;
-                white-space: nowrap;
-                font-family: 'Ma Shan Zheng', cursive;
-                animation: danmakuMove 8s linear forwards;
-                z-index: 5;
-            }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
         }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
         }
-
-        @keyframes float-slow {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-            }
-            50% {
-                transform: translateY(-25px) translateX(10px);
-            }
+        
+        header {
+            background: #4a6bdf;
+            color: white;
+            text-align: center;
+            padding: 20px;
         }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
         }
-
-        @keyframes heartBeat {
-            0% {
-                transform: scale(1);
-            }
-            14% {
-                transform: scale(1.3);
-            }
-            28% {
-                transform: scale(1);
-            }
-            42% {
-                transform: scale(1.3);
-            }
-            70% {
-                transform: scale(1);
-            }
+        
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
         }
-
-        @keyframes twinkle {
-            0%, 100% {
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+        
+        .signature-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
         }
-
-        @keyframes borderRotate {
-            0% {
-                background-position: 0% 0%;
-            }
-            100% {
-                background-position: 300% 0%;
-            }
+        
+        #signatureCanvas {
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+            cursor: crosshair;
+            touch-action: none;
         }
-
-        @keyframes firefly {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.3;
-            }
-            25% {
-                transform: translate(15px, -15px) scale(1.1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.5;
-            }
-            75% {
-                transform: translate(-15px, 15px) scale(0.9);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.3;
-            }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f2f5;
+            border-top: 1px solid #e1e4e8;
         }
-
-        @keyframes float-diagonal {
-            0% {
-                transform: translate(0, 0);
-            }
-            25% {
-                transform: translate(10px, -10px);
-            }
-            50% {
-                transform: translate(20px, 0);
-            }
-            75% {
-                transform: translate(10px, 10px);
-            }
-            100% {
-                transform: translate(0, 0);
-            }
+        
+        .color-picker, .brush-size {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
-        @keyframes danmakuMove {
-            from {
-                transform: translateX(100vw);
-            }
-            to {
-                transform: translateX(-100%);
-            }
-        }
-
-        .heart {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: #FF4D6D;
-            transform: rotate(45deg);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .heart:before, .heart:after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: #FF4D6D;
+        
+        .color-option {
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
         }
-
-        .heart:before {
-            top: -10px;
-            left: 0;
+        
+        .color-option:hover {
+            transform: scale(1.2);
         }
-
-        .heart:after {
-            top: 0;
-            left: -10px;
+        
+        .color-option.active {
+            border-color: #333;
+            transform: scale(1.2);
         }
-
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 100px;
-            box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-            transform: scale(0.6);
-            animation: float-slow 20s ease-in-out infinite;
-        }
-
-        .cloud:before, .cloud:after {
-            content: '';
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
+        
+        .size-option {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             border-radius: 50%;
+            background-color: #ddd;
+            font-size: 12px;
+            transition: all 0.2s;
         }
-
-        .cloud:before {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: 25px;
+        
+        .size-option.active {
+            background-color: #4a6bdf;
+            color: white;
         }
-
-        .cloud:after {
-            width: 35px;
-            height: 35px;
-            top: -15px;
-            right: 25px;
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
         }
-
-        .star {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-            animation: twinkle 2s infinite;
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
         }
-
-        .firefly {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: yellow;
-            border-radius: 50%;
-            box-shadow: 0 0 6px yellow, 0 0 12px yellow;
-            animation: firefly 4s infinite;
+        
+        #clearBtn {
+            background-color: #ff4757;
+            color: white;
         }
-
-        .petal {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #FF9BB3;
-            border-radius: 100% 0 100% 0;
-            transform: rotate(45deg);
-            opacity: 0.7;
-            animation: float-diagonal 8s infinite linear;
+        
+        #clearBtn:hover {
+            background-color: #ff2e43;
         }
-
-        .bg-gradient-animated {
-            background: linear-gradient(135deg, #B5D8FE, #FFD1DC, #D6A4FC, #B5D8FE);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+        
+        #saveBtn {
+            background-color: #2ed573;
+            color: white;
         }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
+        
+        #saveBtn:hover {
+            background-color: #25b560;
+        }
+        
+        #downloadBtn {
+            background-color: #4a6bdf;
+            color: white;
+        }
+        
+        #downloadBtn:hover {
+            background-color: #3858c5;
+        }
+        
+        .instructions {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e1e4e8;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .signature-preview {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        #previewImg {
+            max-width: 100%;
+            border: 1px dashed #ccc;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
             }
-            50% {
-                background-position: 100% 50%;
+            
+            .buttons {
+                margin-left: 0;
+                width: 100%;
             }
-            100% {
-                background-position: 0% 50%;
+            
+            button {
+                flex: 1;
             }
-        }
-        #danmaku-container {
-            z-index: 13
-        }
-        @keyframes asda {
-            0% {
-                scale: 1;
-            }
-            100% {
-                scale: 1.1;
-            }
-        }
-        .ahahahah {
-            /* animation: asda 1.5s alternate infinite; */
         }
     </style>
 </head>
-<body class="bg-gradient-animated min-h-screen overflow-hidden relative font-cute">
-    <!-- 星星背景 -->
-    <div id="stars-container" class="fixed inset-0 pointer-events-none"></div>
-    <!-- 漂浮的云朵 -->
-    <div id="clouds-container" class="fixed inset-0 pointer-events-none"></div>
-    <!-- 漂浮的爱心背景 -->
-    <div id="hearts-container" class="fixed inset-0 pointer-events-none"></div>
-    <!-- 萤火虫 -->
-    <div id="fireflies-container" class="fixed inset-0 pointer-events-none"></div>
-    <!-- 花瓣 -->
-    <div id="petals-container" class="fixed inset-0 pointer-events-none"></div>
-    <!-- 弹幕容器 -->
-    <div id="danmaku-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
-
-    <!-- 主容器 -->
-    <div class="container mx-auto px-4 py-12 flex flex-col items-center justify-center relative z-10 h-screen">
-        <!-- 标题 -->
-        <div class="text-center mb-8">
-            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-love-heart text-shadow mb-2 font-poetic pulse-animation">星河滚烫，你是人间理想</h1>
-            <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-700 font-poetic">晚风轻踩着云朵，月亮在贩售快乐</p>
+<body>
+    <div class="container">
+        <header>
+            <h1>Canvas手写签名板</h1>
+            <p class="subtitle">请在下方区域绘制您的签名</p>
+        </header>
+        
+        <div class="signature-container">
+            <canvas id="signatureCanvas"></canvas>
         </div>
-
-        <!-- 表白卡片 -->
-        <div class="ahahahah bg-white/80 blur-bg rounded-3xl shadow-xl p-8 max-w-md w-full mx-auto transform transition-all duration-500 hover:scale-105 float-animation draw-border relative">
-            <div class="text-center mb-6">
-                <i class="fa fa-heart text-love-heart text-5xl heart-beat"></i>
+        
+        <div class="controls">
+            <div class="color-picker">
+                <span>颜色：</span>
+                <div class="color-option active" style="background-color: #000000;" data-color="#000000"></div>
+                <div class="color-option" style="background-color: #ff4757;" data-color="#ff4757"></div>
+                <div class="color-option" style="background-color: #4a6bdf;" data-color="#4a6bdf"></div>
+                <div class="color-option" style="background-color: #2ed573;" data-color="#2ed573"></div>
             </div>
-            <div class="space-y-4 text-center">
-                <p class="text-lg text-gray-800 font-poetic leading-relaxed" id="confession-text">
-                    亲爱的，<br><br>
-                    山有木兮木有枝，<br>
-                    心悦君兮君不知。<br><br>
-                    你是我绕过山河错落，<br>
-                    才找到的人间烟火。<br><br>
-                    七夕的月光很温柔，<br>
-                    我想和你一起，<br>
-                    从青丝到白发，<br>
-                    从心动到古稀。<br><br>
-                    <span class="text-love-heart font-bold text-xl">愿得一人心，白首不相离。</span>
-                </p>
+            
+            <div class="brush-size">
+                <span>粗细：</span>
+                <div class="size-option active" data-size="2">S</div>
+                <div class="size-option" data-size="4">M</div>
+                <div class="size-option" data-size="6">L</div>
             </div>
-
-            <!-- 互动按钮 -->
-            <div class="mt-8 flex justify-center space-x-6">
-                <button id="yes-btn" class="bg-love-heart hover:bg-love-pink text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-love-heart focus:ring-opacity-50 font-poetic">
-                    许你一生 <i class="fa fa-heart ml-1"></i>
-                </button>
-                <button id="no-btn" class="bg-love-sky hover:bg-blue-300 text-gray-800 font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-love-sky focus:ring-opacity-50 font-poetic">
-                    再等等 <i class="fa fa-moon-o ml-1"></i>
-                </button>
+            
+            <div class="buttons">
+                <button id="clearBtn">清除</button>
+                <button id="saveBtn">保存</button>
+                <button id="downloadBtn">下载</button>
             </div>
         </div>
-
-        <!-- 底部装饰 -->
-        <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-4">
-            <i class="fa fa-star text-yellow-300 text-2xl float-animation twinkle" style="animation-delay: 0s"></i>
-            <i class="fa fa-heart text-love-heart text-2xl float-animation" style="animation-delay: 0.5s"></i>
-            <i class="fa fa-moon-o text-love-sky text-2xl float-animation" style="animation-delay: 1s"></i>
-            <i class="fa fa-heart text-love-heart text-2xl float-animation" style="animation-delay: 1.5s"></i>
-            <i class="fa fa-star text-yellow-300 text-2xl float-animation twinkle" style="animation-delay: 2s"></i>
+        
+        <div class="instructions">
+            <p>提示：使用鼠标或触摸屏进行绘制。点击"保存"可预览签名，点击"下载"可保存签名图片。</p>
         </div>
+    </div>
+    
+    <div class="signature-preview" id="previewContainer">
+        <h3>签名预览</h3>
+        <img id="previewImg" alt="签名预览">
     </div>
 
     <script>
-        // 弹幕文本集合
-        const danmakuTexts = [
-            "我永远偏向你 就像向日葵永远偏向太阳",
-            "我想把所有的偏爱和例外都给你",
-            "世界很大 我只想赖在你身边",
-            "如果不曾遇见你 我本可以忍受孤独",
-            "月光下有两个影子 一个是我的 另一个也是我的",
-            "风很温柔 花很浪漫 你很特别 我很喜欢",
-            "告诉桃花可以开了 我等的人已经来了",
-            "星河滚烫，你是人间理想",
-            "晚风轻踩着云朵，月亮在贩售快乐",
-            "你是我绕过山河错落，才找到的人间烟火",
-            "愿得一人心，白首不相离",
-            "既许一人以偏爱，愿尽余生之慷慨",
-            "往后余生，风雪是你，平淡是你",
-            "心动不是答案，心定才是",
-            "我喜欢你，胜于昨日，略匮明朝",
-            "人间烟火，山河远阔，无一是你，无一不是你",
-            "你是我藏在微风里的喜欢",
-            "月光所照，皆是故乡；双脚所踏，皆是生活",
-            "海底月是天上月，眼前人是心上人",
-            "风很温柔，花很浪漫，你很特别",
-            "希望这个夏天，有惊喜，有心动，有人陪你吹晚风",
-            "你是我明目张胆的偏爱，众所周知的私心",
-            "我对你的爱，胜于昨日，略匮明朝",
-            "宇宙山河浪漫，生活点滴温暖，都值得我前进",
-            "世界很大，幸福很小，有你刚好"
-        ];
-
-        // 创建星星背景
-        function createStars() {
-            const container = document.getElementById('stars-container');
-            const count = 200;
-
-            for (let i = 0; i < count; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                star.style.opacity = `${0.3 + Math.random() * 0.7}`;
-                star.style.width = `${3 + Math.random() * 3}px`;
-                star.style.height = star.style.width;
-                // 随机颜色，让星星更生动
-                const colors = ['#fff', '#B5D8FE', '#D6A4FC'];
-                star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                star.style.boxShadow = `0 0 10px ${star.style.backgroundColor}, 0 0 20px ${star.style.backgroundColor}`;
-
-                container.appendChild(star);
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('signatureCanvas');
+            const ctx = canvas.getContext('2d');
+            const clearBtn = document.getElementById('clearBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const sizeOptions = document.querySelectorAll('.size-option');
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImg = document.getElementById('previewImg');
+            
+            // 设置Canvas尺寸
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                canvas.width = container.offsetWidth;
+                canvas.height = container.offsetHeight;
+                
+                // 设置线条样式
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#000000';
             }
-        }
-
-        // 创建漂浮的云朵
-        function createClouds() {
-            const container = document.getElementById('clouds-container');
-            const count = 10;
-
-            for (let i = 0; i < count; i++) {
-                const cloud = document.createElement('div');
-                cloud.classList.add('cloud');
-
-                cloud.style.left = `${Math.random() * 100}vw`;
-                cloud.style.top = `${Math.random() * 20}vh`;
-                cloud.style.animationDuration = `${15 + Math.random() * 15}s`;
-                cloud.style.animationDelay = `${Math.random() * 5}s`;
-                cloud.style.width = `${100 + Math.random() * 80}px`;
-                cloud.style.height = `${50 + Math.random() * 30}px`;
-                // 随机透明度
-                cloud.style.opacity = `${0.6 + Math.random() * 0.3}`;
-
-                container.appendChild(cloud);
+            
+            // 初始化变量
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            let currentColor = '#000000';
+            let currentSize = 2;
+            
+            // 调整Canvas大小
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 绘制函数
+            function draw(e) {
+                if (!isDrawing) return;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.offsetX || e.touches[0].clientX - canvas.getBoundingClientRect().left, 
+                           e.offsetY || e.touches[0].clientY - canvas.getBoundingClientRect().top);
+                ctx.stroke();
+                
+                [lastX, lastY] = [e.offsetX || e.touches[0].clientX - canvas.getBoundingClientRect().left, 
+                                 e.offsetY || e.touches[0].clientY - canvas.getBoundingClientRect().top];
             }
-        }
-
-        // 创建漂浮的爱心
-        function createHearts() {
-            return
-            const container = document.getElementById('hearts-container');
-            const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC', '#B5D8FE'];
-            const sizes = [15, 20, 25, 30];
-
-            for (let i = 0; i < 40; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-
-                // 随机颜色和大小
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                const size = sizes[Math.floor(Math.random() * sizes.length)];
-
-                heart.style.backgroundColor = color;
-                heart.style.width = `${size}px`;
-                heart.style.height = `${size}px`;
-                heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.top = `${Math.random() * 100}vh`;
-                heart.style.opacity = `${0.3 + Math.random() * 0.5}`;
-                heart.style.animationDuration = `${3 + Math.random() * 10}s`;
-                heart.style.animationDelay = `${Math.random() * 5}s`;
-
-                // 设置伪元素颜色
-                heart.style.setProperty('--heart-color', color);
-                // 为爱心添加before和after伪元素的颜色
-                heart.style.cssText += `
-                    --heart-color: ${color};
-                `;
-                // 为伪元素设置颜色
-                const style = document.createElement('style');
-                style.textContent = `
-                    .heart-${i}:before, .heart-${i}:after {
-                        background-color: ${color};
-                    }
-                `;
-                document.head.appendChild(style);
-                heart.classList.add(`heart-${i}`);
-
-                container.appendChild(heart);
-            }
-        }
-
-        // 创建萤火虫
-        function createFireflies() {
-            const container = document.getElementById('fireflies-container');
-            const count = 100;
-            const colors = ['#FFFF00', '#FFD700', '#FFFFE0'];
-
-            for (let i = 0; i < count; i++) {
-                const firefly = document.createElement('div');
-                firefly.classList.add('firefly');
-
-                firefly.style.width = `${Math.random() * 20 + 10}px`;
-                firefly.style.height = firefly.style.width
-                firefly.style.left = `${Math.random() * 100}vw`;
-                firefly.style.top = `${Math.random() * 100}vh`;
-                firefly.style.animationDuration = `${3 + Math.random() * 5}s`;
-                firefly.style.animationDelay = `${Math.random() * 5}s`;
-                firefly.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                firefly.style.boxShadow = `0 0 6px ${firefly.style.backgroundColor}, 0 0 12px ${firefly.style.backgroundColor}`;
-
-                container.appendChild(firefly);
-            }
-        }
-
-        // 创建花瓣
-        function createPetals() {
-            const container = document.getElementById('petals-container');
-            const count = 30;
-            const colors = ['#FF9BB3', '#FFD1DC', '#FF4D6D', '#D6A4FC'];
-
-            for (let i = 0; i < count; i++) {
-                const petal = document.createElement('div');
-                petal.classList.add('petal');
-
-                petal.style.left = `${Math.random() * 100}vw`;
-                petal.style.top = `-${Math.random() * 50}px`; // 从顶部上方开始
-                petal.style.animationDuration = `${8 + Math.random() * 12}s`;
-                petal.style.animationDelay = `${Math.random() * 5}s`;
-                petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                // 随机旋转角度
-                petal.style.transform = `rotate(${Math.random() * 360}deg)`;
-                // 设置下落速度
-                petal.style.animationTimingFunction = 'ease-in';
-
-                container.appendChild(petal);
-            }
-        }
-
-        // 让花瓣循环下落
-        function animatePetals() {
-            const container = document.getElementById('petals-container');
-            const petals = container.querySelectorAll('.petal');
-
-            petals.forEach(petal => {
-                const rect = petal.getBoundingClientRect();
-                if (rect.top > window.innerHeight) {
-                    // 花瓣已经落下屏幕，重置位置
-                    petal.style.top = `-${Math.random() * 50}px`;
-                    petal.style.left = `${Math.random() * 100}vw`;
-                }
+            
+            // 鼠标事件监听
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                [lastX, lastY] = [e.offsetX, e.offsetY];
             });
-
-            requestAnimationFrame(animatePetals);
-        }
-
-        // 创建弹幕
-        function createDanmaku() {
-            const container = document.getElementById('danmaku-container');
-            const text = danmakuTexts[Math.floor(Math.random() * danmakuTexts.length)];
-            const danmaku = document.createElement('div');
-            danmaku.classList.add('danmaku');
-            danmaku.textContent = text;
-
-            // 随机样式
-            const colors = ['#FF4D6D', '#FF9BB3', '#D6A4FC', '#B5D8FE', '#FFD1DC',
-  '#F8BBD0', '#D1C4E9', '#B3E5FC', '#FFECB3', '#C8E6C9',
-  '#E0F7FA', '#FFCCBC', '#ECEFF1', '#F3E5F5', '#B2DFDB'];
-            let color = colors[Math.floor(Math.random() * colors.length)];
-            let fontSize = 16 + Math.random() * 20;
-            let top = Math.random() * 90 + 10;
-            let duration = 6 + Math.random() * 8;
-            let opacity = 1;
-
-            danmaku.style.zIndex = 200;
-            danmaku.style.color = color;
-            if (text.includes('永远偏向你')) {
-                fontSize = '52';
-                color = '#F8BBD0';
-                top = 30;
-                duration = 15
-
-            }
-            if (text.includes('偏爱和例外都给你')) {
-                fontSize = '52';
-                color = '#D1C4E9';
-                top = 40
-                duration = 15
-            }
-            if (text.includes('我只想赖在你身边')) {
-                fontSize = '52';
-                color = '#D1C4E9';
-                top = 50
-                duration = 16
-            }
-
-            danmaku.style.fontSize = `${fontSize}px`;
-            danmaku.style.top = `${top}vh`;
-            danmaku.style.opacity = opacity;
-            danmaku.style.animationDuration = `${duration}s`;
-            danmaku.style.textShadow = `1px 1px 2px rgba(0,0,0,0.2)`;
-
-            container.appendChild(danmaku);
-
-            // 动画结束后移除元素
-            setTimeout(() => {
-                danmaku.remove();
-            }, duration * 1000);
-        }
-
-        // 持续生成弹幕
-        function startDanmaku() {
-            // 初始生成一些弹幕
-            for (let i = 0; i < 10; i++) {
-                createDanmaku();
-            }
-
-            // 定时生成新弹幕
-            setInterval(createDanmaku, 1000);
-        }
-
-        // 按钮交互
-        document.addEventListener('DOMContentLoaded', () => {
-            createStars();
-            createClouds();
-            createHearts();
-            createFireflies();
-            createPetals();
-            animatePetals();
-            startDanmaku(); // 启动弹幕
-
-            const yesBtn = document.getElementById('yes-btn');
-            const noBtn = document.getElementById('no-btn');
-            const confessionText = document.getElementById('confession-text');
-
-            // 愿意按钮
-            yesBtn.addEventListener('click', () => {
-                confessionText.innerHTML = `
-                    既许一人以偏爱，<br>
-                    愿尽余生之慷慨。<br><br>
-                    往后余生，<br>
-                    风雪是你，平淡是你，<br>
-                    清贫是你，荣华是你，<br>
-                    心底温柔是你，<br>
-                    目光所致也是你。<br><br>
-                    <span class="text-love-heart font-bold text-xl">山河远阔，人间烟火，无一是你，无一不是你。</span><br><br>
-                    <i class="fa fa-heart text-love-heart"></i> <i class="fa fa-heart text-love-heart"></i> <i class="fa fa-heart text-love-heart"></i>
-                `;
-
-                // 创建更多爱心和花瓣
-                createHearts();
-                createPetals();
-
-                // 修改按钮
-                yesBtn.textContent = '我爱你';
-                yesBtn.disabled = true;
-                noBtn.style.display = 'none';
+            
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mouseout', () => isDrawing = false);
+            
+            // 触摸事件监听
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                isDrawing = true;
+                [lastX, lastY] = [e.touches[0].clientX - canvas.getBoundingClientRect().left, 
+                                 e.touches[0].clientY - canvas.getBoundingClientRect().top];
             });
-
-            // 再考虑按钮 - 会随机移动
-            noBtn.addEventListener('click', () => {
-                const maxX = window.innerWidth - noBtn.offsetWidth;
-                const maxY = window.innerHeight - noBtn.offsetHeight;
-
-                const randomX = Math.floor(Math.random() * (maxX)) - 200;
-                const randomY = Math.floor(Math.random() * (maxY)) - 200;
-
-                noBtn.style.position = 'absolute';
-                noBtn.style.left = `${randomX}px`;
-                noBtn.style.top = `${randomY}px`;
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                draw(e);
+            });
+            
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            
+            // 清除画布
+            clearBtn.addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                previewContainer.style.display = 'none';
+            });
+            
+            // 保存签名（预览）
+            saveBtn.addEventListener('click', () => {
+                const dataURL = canvas.toDataURL('image/png');
+                previewImg.src = dataURL;
+                previewContainer.style.display = 'block';
+            });
+            
+            // 下载签名
+            downloadBtn.addEventListener('click', () => {
+                const dataURL = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'signature.png';
+                link.href = dataURL;
+                link.click();
+            });
+            
+            // 颜色选择
+            colorOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    colorOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    currentColor = option.getAttribute('data-color');
+                    ctx.strokeStyle = currentColor;
+                });
+            });
+            
+            // 笔刷粗细选择
+            sizeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    sizeOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    currentSize = parseInt(option.getAttribute('data-size'));
+                    ctx.lineWidth = currentSize;
+                });
             });
         });
     </script>
 </body>
 </html>
-
-<style>
-    @layer utilities {
-        .content-auto {
-            content-visibility: auto;
-        }
-        .text-shadow {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        .float-animation {
-            /* animation: float 3s ease-in-out infinite; */
-        }
-        .pulse-animation {
-            /* animation: pulse 2s infinite; */
-        }
-        .heart-beat {
-            /* animation: heartBeat 1.5s infinite; */
-        }
-        .twinkle {
-            animation: twinkle 2s infinite;
-        }
-        .draw-border {
-            position: relative;
-            border-radius: 1.5rem;
-            /* 修改边框样式为渐变并添加动画 */
-            border: 4px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                        linear-gradient(270deg, #FF4D6D, #FF9BB3, #D6A4FC, #B5D8FE, #FF4D6D) border-box;
-            background-size: 300% 300%;
-            animation: border-spin 6s linear infinite;
-        }
-        .draw-border::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border: 2px solid transparent;
-            border-radius: inherit;
-            background: linear-gradient(45deg, #FF9BB3, #D6A4FC, #B5D8FE, #FF9BB3) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: borderRotate 8s linear infinite;
-        }
-        .blur-bg {
-            backdrop-filter: blur(8px);
-        }
-        .danmaku {
-            position: absolute;
-            white-space: nowrap;
-            font-family: 'Ma Shan Zheng', cursive;
-            animation: danmakuMove 8s linear forwards;
-            z-index: 5;
-        }
-    }
-
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-15px);
-        }
-    }
-
-    @keyframes float-slow {
-        0%, 100% {
-            transform: translateY(0) translateX(0);
-        }
-        50% {
-            transform: translateY(-25px) translateX(10px);
-        }
-    }
-
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.05);
-        }
-    }
-
-    @keyframes heartBeat {
-        0% {
-            transform: scale(1);
-        }
-        14% {
-            transform: scale(1.3);
-        }
-        28% {
-            transform: scale(1);
-        }
-        42% {
-            transform: scale(1.3);
-        }
-        70% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes twinkle {
-        0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 1;
-            transform: scale(1.2);
-        }
-    }
-
-    @keyframes borderRotate {
-        0% {
-            background-position: 0% 0%;
-        }
-        100% {
-            background-position: 300% 0%;
-        }
-    }
-
-    @keyframes firefly {
-        0% {
-            transform: translate(0, 0) scale(1);
-            opacity: 0.3;
-        }
-        25% {
-            transform: translate(15px, -15px) scale(1.1);
-            opacity: 0.8;
-        }
-        50% {
-            transform: translate(0, 0) scale(1);
-            opacity: 0.5;
-        }
-        75% {
-            transform: translate(-15px, 15px) scale(0.9);
-            opacity: 0.7;
-        }
-        100% {
-            transform: translate(0, 0) scale(1);
-            opacity: 0.3;
-        }
-    }
-
-    @keyframes float-diagonal {
-        0% {
-            transform: translate(0, 0);
-        }
-        25% {
-            transform: translate(10px, -10px);
-        }
-        50% {
-            transform: translate(20px, 0);
-        }
-        75% {
-            transform: translate(10px, 10px);
-        }
-        100% {
-            transform: translate(0, 0);
-        }
-    }
-
-    @keyframes danmakuMove {
-        from {
-            transform: translateX(100vw);
-        }
-        to {
-            transform: translateX(-100%);
-        }
-    }
-
-    .heart {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: #FF4D6D;
-        transform: rotate(45deg);
-        animation: float 3s ease-in-out infinite;
-    }
-
-    .heart:before, .heart:after {
-        content: '';
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: #FF4D6D;
-        border-radius: 50%;
-    }
-
-    .heart:before {
-        top: -10px;
-        left: 0;
-    }
-
-    .heart:after {
-        top: 0;
-        left: -10px;
-    }
-
-    .cloud {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 100px;
-        box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-        transform: scale(0.6);
-        animation: float-slow 20s ease-in-out infinite;
-    }
-
-    .cloud:before, .cloud:after {
-        content: '';
-        position: absolute;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 50%;
-    }
-
-    .cloud:before {
-        width: 50px;
-        height: 50px;
-        top: -25px;
-        left: 25px;
-    }
-
-    .cloud:after {
-        width: 35px;
-        height: 35px;
-        top: -15px;
-        right: 25px;
-    }
-
-    .star {
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        background: white;
-        border-radius: 50%;
-        box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-        animation: twinkle 2s infinite;
-    }
-
-    .firefly {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: yellow;
-        border-radius: 50%;
-        box-shadow: 0 0 6px yellow, 0 0 12px yellow;
-        animation: firefly 4s infinite;
-    }
-
-    .petal {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background-color: #FF9BB3;
-        border-radius: 100% 0 100% 0;
-        transform: rotate(45deg);
-        opacity: 0.7;
-        animation: float-diagonal 8s infinite linear;
-    }
-
-    .bg-gradient-animated {
-        background: linear-gradient(135deg, #B5D8FE, #FFD1DC, #D6A4FC, #B5D8FE);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-    }
-
-    @keyframes gradientBG {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-    #danmaku-container {
-        z-index: 13
-    }
-</style>
