@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-	<title>大转盘抽奖</title>
+	<title>中秋国庆幸运大转盘</title>
 <style>
 *{
 	margin: 0;
@@ -31,8 +31,83 @@ body {
 		right: 0;
 		bottom: 0;
 		background-image: 
-			url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M12 18L12 6' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M6 12L18 12' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M16.2426 7.75736L7.75736 16.2426' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M16.2426 16.2426L7.75736 7.75736' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3C/svg%3E");
+			url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M12 18L12 6' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M6 12L18 12' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M16.2426 7.75736L7.75736 16.2426' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3Cpath d='M16.2426 16.2426L7.75736 7.75736' stroke='rgba(255, 215, 0, 0.2)' stroke-width='0.5'/%3E%3C/svg%3E"); 
 		z-index: -1;
+	}
+
+	/* 增强背景层次感 */
+	body::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0) 70%);
+		z-index: -1;
+	}
+
+	/* 装饰性灯笼 */
+	.lantern {
+		position: absolute;
+		width: 60px;
+		height: 80px;
+		background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+		border-radius: 50% 50% 10% 10%;
+		box-shadow: 0 5px 15px rgba(231, 76, 60, 0.7);
+		animation: swing 3s ease-in-out infinite;
+	}
+
+	.lantern::before {
+		content: '';
+		position: absolute;
+		top: -10px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 20px;
+		height: 20px;
+		background-color: #f1c40f;
+		border-radius: 50%;
+	}
+
+	.lantern::after {
+		content: '中秋';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: #f1c40f;
+		font-size: 16px;
+		font-weight: bold;
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+	}
+
+	@keyframes swing {
+		0%, 100% { transform: rotate(-3deg); }
+		50% { transform: rotate(3deg); }
+	}
+
+	/* 飘落的装饰元素 */
+	.falling-petal {
+		position: absolute;
+		background-color: rgba(255, 99, 71, 0.6);
+		border-radius: 50% 0 50% 0;
+		opacity: 0;
+		animation: fall linear infinite;
+	}
+
+	@keyframes fall {
+		0% {
+			opacity: 0;
+			transform: translateY(-10%) rotate(0deg) scale(0.5);
+		}
+		10% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(100vh) rotate(360deg) scale(0.5);
+		}
 	}
 
 #lottery-wrap{
@@ -72,15 +147,160 @@ canvas{
 		opacity: 0;
 		animation: twinkle 3s infinite;
 	}
+	
+/* 中奖结果显示区域 - 修改为页面内展示 */
+.result-container {
+    margin-top: 30px;
+    width: 80%;
+    max-width: 400px;
+    background: linear-gradient(135deg, #fffdc9 0%, #ffdf8a 100%);
+    color: #ee6500;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.result-container.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.result-container.show .result-content {
+    transform: scale(1);
+}
+
+.result-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #c1121f;
+}
+
+.result-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.result-close {
+    background-color: #c1121f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.result-close:hover {
+    background-color: #780000;
+}
+
+/* 转盘标题 */
+.lottery-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 底部文字 */
+.footer-text {
+    margin-top: 30px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 装饰性文字 */
+.festival-text {
+	position: absolute;
+	font-size: 16px;
+	color: rgba(255, 215, 0, 0.8);
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	font-weight: bold;
+	transform: rotate(-15deg);
+}
+
+/* 云纹装饰 */
+.cloud-decoration {
+	position: absolute;
+	width: 200px;
+	height: 80px;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 40px;
+	filter: blur(5px);
+}
+
+.cloud-decoration::before, .cloud-decoration::after {
+	content: '';
+	position: absolute;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 50%;
+}
+
+.cloud-decoration::before {
+	width: 100px;
+	height: 100px;
+	top: -50px;
+	left: 30px;
+}
+
+.cloud-decoration::after {
+	width: 80px;
+	height: 80px;
+	top: -40px;
+	right: 30px;
+}
 </style>
 </head>
 <body>
+<!-- 装饰性灯笼 -->
+<div class="lantern" style="top: 15%; left: 5%; animation-delay: 0s;"></div>
+<div class="lantern" style="top: 20%; right: 1%; animation-delay: 1s;"></div>
+<div class="lantern" style="top: 42%; left: 1%; animation-delay: 0.5s;"></div>
+<div class="lantern" style="top: 48%; right: 1%; animation-delay: 1.5s;"></div>
+
+<!-- 云纹装饰 -->
+<div class="cloud-decoration" style="top: 10%; left: 5%; opacity: 0.3;"></div>
+<div class="cloud-decoration" style="bottom: 10%; right: 5%; opacity: 0.3;"></div>
+
 <!-- 装饰性星星 -->
 	<div class="stars-container"></div>
+
+<!-- 装饰性文字 -->
+<div class="festival-text" style="top: 10%; left: 50%; transform: translateX(-50%);">双节同庆</div>
+<div class="festival-text" style="top: 15%; left: 20%; transform: rotate(-15deg);">月圆人团圆</div>
+<div class="festival-text" style="top: 15%; right: 20%; transform: rotate(15deg);">国富民强</div>
+<div class="festival-text" style="bottom: 15%; left: 20%; transform: rotate(15deg);">阖家欢乐</div>
+<div class="festival-text" style="bottom: 15%; right: 20%; transform: rotate(-15deg);">繁荣昌盛</div>
+
+<!-- 转盘标题 -->
+<h1 class="lottery-title">中秋国庆幸运大转盘</h1>
+<div class="subtitle">双节同庆 · 幸运满满</div>
+	
 <div id="lottery-wrap">
     <div id="lottery-handler"></div>
     <canvas width="300" height="300" id="lottery"></canvas>
 </div>
+
+<!-- 中奖结果显示区域 - 改为页面内展示 -->
+<div class="result-container" id="resultContainer">
+    <h2 class="result-title" id="result-title1"></h2>
+    <img style="width: 50px; height: 50px;" src="" alt="" id="resultImg">
+    <p class="result-text" id="resultText">恭喜你中得：10元红包</p>
+    <button class="result-close" id="resultClose">确定</button>
+</div>
+
+<!-- 底部文字 -->
+<p class="footer-text">中秋团圆，国庆快乐！</p>
+<p class="footer-subtext">愿好运常伴，幸福安康</p>
 
 <script>
 // 创建随机星星背景
@@ -110,8 +330,55 @@ canvas{
 		}
 	}
 
-	// 页面加载完成后创建星星
-	document.addEventListener('DOMContentLoaded', createStars);
+	// 创建飘落的装饰元素
+	function createFallingElements() {
+		const body = document.body;
+		const count = 30;
+		
+		for (let i = 0; i < count; i++) {
+			const petal = document.createElement('div');
+			petal.classList.add('falling-petal');
+			
+			// 随机大小、位置和动画时长
+			const size = Math.random() * 10 + 5;
+			const x = Math.random() * 100;
+			const duration = Math.random() * 10 + 10;
+			const delay = Math.random() * 15;
+			const rotation = Math.random() * 360;
+			
+			petal.style.width = `${size}px`;
+			petal.style.height = `${size}px`;
+			petal.style.left = `${x}%`;
+			petal.style.animationDuration = `${duration}s`;
+			petal.style.animationDelay = `${delay}s`;
+			petal.style.transform = `rotate(${rotation}deg)`;
+			
+			// 随机颜色 - 红色系和金色系
+			const colors = ['rgba(255, 99, 71, 0.6)', 'rgba(255, 165, 0, 0.6)', 'rgba(255, 215, 0, 0.6)'];
+			petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+			
+			body.appendChild(petal);
+		}
+	}
+
+	// 页面加载完成后创建装饰元素
+	document.addEventListener('DOMContentLoaded', function() {
+		createStars();
+		createFallingElements();
+	});
+	
+	// 初始化结果显示区域
+	const resultContainer = document.getElementById('resultContainer');
+	const resultText = document.getElementById('resultText');
+	const resultImg = document.getElementById('resultImg');
+	const resultTitle = document.getElementById('result-title1');
+	const resultClose = document.getElementById('resultClose');
+	
+	// 关闭结果显示
+	resultClose.addEventListener('click', function() {
+		resultContainer.classList.remove('show');
+	});
+
 /*模拟ajax请求数据返回*/
 function _ajax(callback){
 	/*jQuery.ajax({
@@ -123,31 +390,35 @@ function _ajax(callback){
 	})*/
 	setTimeout(function(){
 		var _index   = Math.floor(Math.random()*products.length);
-		var response = {id: 1, name: products[_index].name, index: _index};
+		var response = {id: 1,title: products[_index].title, name: products[_index].name, index: _index, imgUrl: products[_index].imgUrl, type: products[_index].type};
 		callback && callback(response);
 	}, 100);
 }
 
 var products = [
     {
-        "imgUrl": "./images/redpacket.png",
-        "name": "10元红包"
+        "imgUrl": "./images/sm.jpg",
+        "name": "保持神秘",
+        type: "奖励小王子",
+        title: '恭喜你获得：亲吻小王子~'
     },
     {
-        "imgUrl": "./images/redpacket.png",
-        "name": "20元红包"
+        "imgUrl": "./images/mh.jpg",
+        "name": "盲盒一个",
+        type: "盲盒",
+        title: '恭喜你获得：抽取盲盒一个~'
     },
     {
-        "imgUrl": "./images/redpacket.png",
-        "name": "30元红包"
+        "imgUrl": "./images/my.jpg",
+        "name": "坚强",
+        type: '没有',
+        title: '很遗憾 什么都没有~ 再接再厉吧！'
     },
     {
-        "imgUrl": "./images/redpacket.png",
-        "name": "40元红包"
-    },
-    {
-        "imgUrl": "./images/redpacket.png",
-        "name": "50元红包"
+        "imgUrl": "./images/jl.jpg",
+        "name": "奖励",
+        type: "奖励",
+        title: '恭喜你获得：愿望一个~'
     },
 ];
 (function(){
@@ -365,6 +636,9 @@ Lottery.prototype = {
         this._fastClick(this.options.handler, function(ev){
             if(self.hasClass(this, 'disabled'))return;
             if(self.isOver){
+                // 隐藏之前的结果显示
+                resultContainer.classList.remove('show');
+                
                 self.sTime = self.now();
                 self._beginRotate();
                 typeof self.options.handlerCallback === 'function' && self.options.handlerCallback.call(this, self);
@@ -469,7 +743,7 @@ Lottery.prototype = {
             outerRadius: '',
             innerRadius: 0,
             /*循环填充数组颜色*/
-            fillStyle: ['#ffdf8a', '#fffdc9', '#ffeaa7', '#fff9c4', '#ffecb3', '#fff3e0', '#ffeb3b', '#ffd600'],
+            fillStyle: [ '#fff3e0', '#fff9c4', '#fffee6','#ffdf8a', '#fffdc9', '#ffeaa7', '#fff9c4', '#ffecb3', ],
             /*重复触发的间距时间*/
             interval: 1000,
             /*速度越大越快*/
@@ -522,7 +796,16 @@ new Lottery(document.getElementById('lottery'), {
 			console.log(response);
 			/*指定停止的位置:索引*/
 			_interface.stop(response.index, function(){
-				alert('恭喜你中得:' + response.name)
+				// 在页面上显示中奖结果
+				resultText.textContent = response.title;
+				// 显示中奖图片
+				resultImg.src = response.imgUrl;
+				// 显示中奖类型
+				resultTitle.textContent = response.type;
+				// 添加显示动画
+				setTimeout(function(){
+					resultContainer.classList.add('show');
+				}, 300);
 			});
 		});
 	},
