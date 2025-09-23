@@ -379,6 +379,45 @@ canvas{
 		resultContainer.classList.remove('show');
 	});
 
+    /**
+ * 从数组中按指定权重随机抽取一项
+ * @param {Array} items - 待抽取的数组
+ * @param {Array} weights - 权重数组（非负数，可不为1）
+ * @returns {any} 抽中的数组元素
+ */
+function weightedRandom(items, weights) {
+  // 输入验证
+  if (items.length === 0) throw new Error('数组不能为空');
+  if (items.length !== weights.length) {
+    throw new Error('数组和权重长度必须一致');
+  }
+  if (weights.some(w => w < 0)) throw new Error('权重不能为负数');
+
+  // 计算总权重并归一化
+  const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+  if (totalWeight <= 0) throw new Error('总权重必须大于0');
+
+  // 生成累积概率分布
+  const cumulative = [];
+  let last = 0;
+  for (const weight of weights) {
+    const normalized = weight / totalWeight;
+    cumulative.push(last + normalized);
+    last += normalized;
+  }
+
+  // 处理浮点精度误差（确保最后一项为1）
+  cumulative[cumulative.length - 1] = 1;
+
+  // 生成随机数并匹配区间
+  const random = Math.random();
+  for (let i = 0; i < cumulative.length; i++) {
+    if (random < cumulative[i]) return i;
+  }
+
+  // 浮点计算兜底（理论上不会执行）
+  return items.length - 1;
+}
 /*模拟ajax请求数据返回*/
 function _ajax(callback){
 	/*jQuery.ajax({
@@ -389,12 +428,12 @@ function _ajax(callback){
 		}
 	})*/
 	setTimeout(function(){
-		var _index   = Math.floor(Math.random()*products.length);
+		var _index   = weightedRandom(products, [1,1,1,1,1,1,1,1,1,1]);
 		var response = {id: 1,title: products[_index].title, name: products[_index].name, index: _index, imgUrl: products[_index].imgUrl, type: products[_index].type};
 		callback && callback(response);
 	}, 100);
 }
-
+//  保持神秘2个 慢合3个 奖励2个 坚强3个
 var products = [
     {
         "imgUrl": "https://guowei-business.oss-cn-heyuan.aliyuncs.com/file/aYDDtbgZIxXBVIE0quzig.jpg",
